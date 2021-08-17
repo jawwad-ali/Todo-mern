@@ -7,7 +7,7 @@ const auth = require("../middleware/auth")
 // Router object to handle the request
 
 // List todos
-router.get('/', auth, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     // latest added todo will be shown first
     const todos = await Todo.find().sort({ date: -1 })
