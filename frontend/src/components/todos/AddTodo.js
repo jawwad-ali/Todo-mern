@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { TextField, Button } from "@material-ui/core"
 import { Send } from "@material-ui/icons"
 import { makeStyles } from "@material-ui/styles"
-import { addTodo } from "../../store/actions/todoActions"
+import { addTodo, updateTodo } from "../../store/actions/todoActions"
 import { useDispatch } from "react-redux"
 
 const useStyles = makeStyles({
@@ -19,27 +19,36 @@ const useStyles = makeStyles({
     }
 })
 
-const AddTodo = () => {
+const AddTodo = ({ todo, setTodo }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
 
-    const [todo, setTodo] = useState({
-        name: "",
-        isComplete: false
-    })
-
     // handle change
     const handleChange = (e) => {
-        setTodo({ ...todo, name: e.target.value, date: new Date() })
+        setTodo({ ...todo, name: e.target.value })
     }
 
     // function to be executed on form submit
     const handleSubmit = e => {
         e.preventDefault()
 
-        // add todo by dispatch
-        dispatch(addTodo(todo))
-        
+        // if todo id exists it means todo will be update otherwise new todo will be added.
+        if (todo._id) {
+            const id = todo._id
+            const updatedTodo = {
+                name: todo.name,
+                isComplete: todo.isComplete,
+                date: todo.date,
+                author: "Ali"
+            }
+            dispatch(updateTodo(updatedTodo, id))
+        }
+        else {
+            // add todo by dispatch
+            const newTodo = { ...todo, date: new Date() }
+            dispatch(addTodo(newTodo))
+        }
+
         setTodo({
             name: "",
             isComplete: false

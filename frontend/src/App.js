@@ -3,6 +3,8 @@ import { BrowserRouter, Switch, Route } from "react-router-dom"
 import { NavBar, SignIn, SignUp, Todos } from "./components/index"
 import { Container } from "@material-ui/core"
 import { makeStyles } from "@material-ui/styles"
+import { ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css";
 
 const useStyles = makeStyles({
   contentStyles: {
@@ -16,6 +18,7 @@ function App() {
     <>
       <Container maxWidth="lg">
         <BrowserRouter>
+        <ToastContainer />
           <NavBar />
 
           <Container className={classes.contentStyles} maxWidth="sm" >
@@ -35,4 +38,4 @@ function App() {
 }
 
 export default App;
-// Start from forms and icons video
+// start from jwt token video

@@ -14,9 +14,11 @@ const useStyles = makeStyles({
     }
 })
 
-function ListTodos() {
+function ListTodos({ setTodo }) {
     const classes = useStyles()
     const dispatch = useDispatch()
+
+    // getting the state of todo from redux store
     const todos = useSelector((state) => state.todos)
     console.log(todos)
 
@@ -27,9 +29,18 @@ function ListTodos() {
     return (
         <>
             <div className={classes.listTodoContainer}>
-                <Typography variant="h5">Todos</Typography>
-                <Todo />
-                <Todo />
+                <Typography variant="h5">
+                    {todos.length > 0 ? "The Todos" : "No todos to display"}
+                </Typography>
+                {todos && todos.map((todo) => {
+                    return (
+                        <Todo
+                            todo={todo}
+                            key={todo._id}
+                            setTodo={setTodo}
+                        />
+                    )
+                })}
             </div>
         </>
     )

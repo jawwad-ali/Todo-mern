@@ -93,7 +93,7 @@ router.put("/:id", async (req, res) => {
     // if todo exist
     const { name, author, isComplete, date, uid } = req.body
 
-    const updatedTodo = await Todo.findByIdAndUpdate(req.params.id, {
+    const updatedTodo = await Todo.findByIdAndUpdate(req.params.id,  {
       name, author, isComplete, date, uid
       // new:true is sending the updated todo version
     }, { new: true })
@@ -114,9 +114,9 @@ router.patch("/:id", async (req, res) => {
     const todo = await Todo.findById(req.params.id)
     if (!todo) return res.status(404).send("Todo not found")
 
-    const updatedTodo = await Todo.findByIdAndUpdate(req.params.id, {
+    const updatedTodo = await Todo.findByIdAndUpdate(req.params.id,{
       isComplete: !todo.isComplete
-    })
+    } , {new:true} )
     res.send(updatedTodo)
   }
   catch (error) {
@@ -126,7 +126,3 @@ router.patch("/:id", async (req, res) => {
 
 })
 module.exports = router
-
-
-
-// start from 33.06
