@@ -7,11 +7,18 @@ const auth = require("../middleware/auth")
 // Router object to handle the request
 
 // List todos
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
     // latest added todo will be shown first
     const todos = await Todo.find().sort({ date: -1 })
-    res.send(todos)
+
+    /*
+      display todos of a particular user
+      todo id and user id will match and then todos will be displayed    
+    */
+    const filteredTodos = todos.filter(todo => todo.uid === req.user._id)
+
+    res.send(filteredTodos)
   } catch (err) {
     res.status(500).send(error.message)
     console.log(error.message)
@@ -19,7 +26,7 @@ router.get('/', async (req, res) => {
 })
 
 // Create Todos
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   // joi validation schema
   const schema = Joi.object({
     name: Joi.string().min(3).max(200).required(),
@@ -56,10 +63,15 @@ router.post('/', async (req, res) => {
 })
 
 // DELETE TODO
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
   try {
     const todo = await Todo.findById(req.params.id)
     if (!todo) return res.status(404).send("Todo not found")
+
+    // if user isn't AUTHORIZED
+    // if (todo.uid !== req.user._id)
+    //   return res.status(401).send(" Not authorized...");
+
     const deleteTodo = await Todo.findByIdAndDelete(req.params.id)
     res.send(deleteTodo)
   } catch (err) {
@@ -69,7 +81,7 @@ router.delete('/:id', async (req, res) => {
 })
 
 // UPDATE TODO
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   // joi validation schema
   const schema = Joi.object({
     name: Joi.string().min(3).max(200).required(),
@@ -90,10 +102,14 @@ router.put("/:id", async (req, res) => {
     const todo = await Todo.findById(req.params.id)
     if (!todo) return res.status(404).send("Todo not found")
 
+    // if user isn't AUTHORIZED
+    // if (todo.uid !== req.user._id)
+    //   return res.status(401).send(" Not authorized...");
+
     // if todo exist
     const { name, author, isComplete, date, uid } = req.body
 
-    const updatedTodo = await Todo.findByIdAndUpdate(req.params.id,  {
+    const updatedTodo = await Todo.findByIdAndUpdate(req.params.id, {
       name, author, isComplete, date, uid
       // new:true is sending the updated todo version
     }, { new: true })
@@ -108,15 +124,19 @@ router.put("/:id", async (req, res) => {
 })
 
 // PATCH TODO
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", auth, async (req, res) => {
   try {
 
     const todo = await Todo.findById(req.params.id)
     if (!todo) return res.status(404).send("Todo not found")
 
-    const updatedTodo = await Todo.findByIdAndUpdate(req.params.id,{
+    // if user isn't AUTHORIZED
+    // if (todo.uid !== req.user._id)
+    //   return res.status(401).send(" Not authorized...");
+
+    const updatedTodo = await Todo.findByIdAndUpdate(req.params.id, {
       isComplete: !todo.isComplete
-    } , {new:true} )
+    }, { new: true })
     res.send(updatedTodo)
   }
   catch (error) {

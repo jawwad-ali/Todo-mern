@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import { TextField, Button } from "@material-ui/core"
 import { Send } from "@material-ui/icons"
 import { makeStyles } from "@material-ui/styles"
@@ -39,7 +39,8 @@ const AddTodo = ({ todo, setTodo }) => {
                 name: todo.name,
                 isComplete: todo.isComplete,
                 date: todo.date,
-                author: "Ali"
+                author: todo.author,
+                uid: todo.uid
             }
             dispatch(updateTodo(updatedTodo, id))
         }

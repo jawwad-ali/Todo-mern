@@ -20,7 +20,6 @@ function ListTodos({ setTodo }) {
 
     // getting the state of todo from redux store
     const todos = useSelector((state) => state.todos)
-    console.log(todos)
 
     useEffect(() => {
         dispatch(getTodos())

@@ -12,6 +12,7 @@ const authReducer = (state = initialState, action) => {
 
     switch (action.type) {
         case "LOAD_USER":
+        case "SIGN_IN":
         case "SIGN_UP":
             toast("Welcome", {
                 position: toast.POSITION.BOTTOM_RIGHT
@@ -24,6 +25,17 @@ const authReducer = (state = initialState, action) => {
                 _id: user._id
             }
 
+        case "SIGN_OUT":
+            localStorage.removeItem("token");
+            toast("GoodBye", {
+                position: toast.POSITION.BOTTOM_RIGHT
+            })
+            return {
+                token: null,
+                email: null,
+                name: null,
+                _id: null
+            }
         default:
             return state
     }

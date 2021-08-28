@@ -7,7 +7,7 @@ import { Redirect } from 'react-router-dom'
 
 const useStyles = makeStyles({
     loginForm: {
-        margin: "0px auto",
+        margin: "0px auto", 
         padding: "30px",
         borderRadius: "9px",
         boxShadow: "0px 0px 12px -3px black"
